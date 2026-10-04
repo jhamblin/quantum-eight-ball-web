@@ -171,22 +171,22 @@ h1 {
 }
 
 .bars {
+  overflow-x: auto;
+}
+
+.bars-track {
   display: flex;
   align-items: flex-end;
   gap: 4px;
   height: 220px;
-  overflow-x: auto;
 }
 
 .bar-col {
   flex: 1 1 0;
   min-width: 10px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
+  align-items: flex-end;
   height: 100%;
-  gap: 4px;
 }
 
 .bar {
@@ -201,10 +201,30 @@ h1 {
   background: var(--accent);
 }
 
+.bars-labels {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  height: 100px;
+}
+
+.label-col {
+  flex: 1 1 0;
+  min-width: 10px;
+  display: flex;
+  justify-content: center;
+}
+
 .bar-label {
-  font-size: 0.6rem;
-  color: var(--muted);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 100px;
+  font-size: 0.62rem;
+  color: var(--muted);
+  cursor: default;
 }
 
 .rotation-panel {

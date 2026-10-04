@@ -28,23 +28,34 @@ qubitButtons.forEach((btn) => {
 
 function buildBars(n, answers, hiddenIndex) {
   barsEl.innerHTML = "";
+
+  const track = document.createElement("div");
+  track.className = "bars-track";
+  const labels = document.createElement("div");
+  labels.className = "bars-labels";
+
   for (let i = 0; i < n; i++) {
     const col = document.createElement("div");
     col.className = "bar-col";
-
     const bar = document.createElement("div");
     bar.className = "bar" + (i === hiddenIndex ? " is-hidden" : "");
     bar.style.height = "2px";
     bar.title = answers[i];
+    col.appendChild(bar);
+    track.appendChild(col);
 
+    const labelCol = document.createElement("div");
+    labelCol.className = "label-col";
     const label = document.createElement("div");
     label.className = "bar-label";
-    label.textContent = i.toString(2).padStart(Math.log2(n), "0");
-
-    col.appendChild(bar);
-    if (n <= 8) col.appendChild(label);
-    barsEl.appendChild(col);
+    label.textContent = answers[i];
+    label.title = answers[i];
+    labelCol.appendChild(label);
+    labels.appendChild(labelCol);
   }
+
+  barsEl.appendChild(track);
+  barsEl.appendChild(labels);
 }
 
 function setBarHeights(probs) {
