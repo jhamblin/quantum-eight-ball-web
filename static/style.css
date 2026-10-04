@@ -1,0 +1,272 @@
+:root {
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --text: #1b1a17;
+  --muted: #6b6760;
+  --line: #ddd9d1;
+  --accent: #6d28d9;
+  --accent-soft: #ede9fe;
+  --hit: #16a34a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15131a;
+    --surface: #1f1c26;
+    --text: #f0eef5;
+    --muted: #9b96a8;
+    --line: #38333f;
+    --accent: #a78bfa;
+    --accent-soft: #2e2740;
+    --hit: #4ade80;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0 16px;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-block: 40px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.hero {
+  text-align: center;
+}
+
+.ball {
+  font-size: 56px;
+  line-height: 1;
+  display: inline-block;
+}
+
+.ball.shaking {
+  animation: shake 0.5s ease-in-out infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-12deg); }
+  75% { transform: rotate(12deg); }
+}
+
+h1 {
+  margin: 8px 0 4px;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin: 0 auto;
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+.ask-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+#question {
+  flex: 1 1 280px;
+  min-width: 0;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+#question:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.qubit-select {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.qubit-option {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.qubit-option.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+#shake-btn {
+  padding: 12px 22px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#shake-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.status {
+  text-align: center;
+  min-height: 1.2em;
+  color: var(--muted);
+}
+
+.stage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  flex: 1 1 320px;
+}
+
+.panel h2 {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 220px;
+  overflow-x: auto;
+}
+
+.bar-col {
+  flex: 1 1 0;
+  min-width: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 4px;
+}
+
+.bar {
+  width: 100%;
+  min-height: 2px;
+  background: var(--accent-soft);
+  border-radius: 3px 3px 0 0;
+  transition: height 0.5s ease;
+}
+
+.bar.is-hidden {
+  background: var(--accent);
+}
+
+.bar-label {
+  font-size: 0.6rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.rotation-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#rotation-svg {
+  max-width: 100%;
+}
+
+#state-vector {
+  transition: transform 0.5s ease;
+  transform-origin: 110px 110px;
+}
+
+.axis-label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.rotation-caption {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 10px 0 0;
+}
+
+.reveal {
+  text-align: center;
+}
+
+.revealed-text {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.hit-rate {
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+
+.footnote {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.footnote a {
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .ask-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #question {
+    flex: 1 1 auto;
+  }
+}

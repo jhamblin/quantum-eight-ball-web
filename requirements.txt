@@ -1,0 +1,4 @@
+amazon-braket-sdk>=1.87.0
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+numpy>=1.26.0

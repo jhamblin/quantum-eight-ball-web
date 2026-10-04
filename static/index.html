@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quantum Magic 8-Ball</title>
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="ball" id="ball">🎱</div>
+      <h1>Quantum Magic 8-Ball</h1>
+      <p class="subtitle">
+        Ask a question. A real quantum coin-flip hides an answer, then
+        <strong>Grover's algorithm</strong> searches it out in front of you.
+      </p>
+    </header>
+
+    <form id="ask-form" class="ask-form">
+      <input
+        id="question"
+        type="text"
+        maxlength="280"
+        placeholder="Will this project work?"
+        autocomplete="off"
+      />
+      <div class="qubit-select" role="radiogroup" aria-label="Number of possible answers">
+        <button type="button" class="qubit-option" data-qubits="3">8 answers</button>
+        <button type="button" class="qubit-option" data-qubits="4">16 answers</button>
+        <button type="button" class="qubit-option" data-qubits="5">32 answers</button>
+      </div>
+      <button type="submit" id="shake-btn">Shake</button>
+    </form>
+
+    <section id="status" class="status" aria-live="polite"></section>
+
+    <section id="stage" class="stage" hidden>
+      <div class="panel bars-panel">
+        <h2>Amplitude of each possible answer</h2>
+        <div id="bars" class="bars"></div>
+      </div>
+
+      <div class="panel rotation-panel">
+        <h2>The same evolution, as a rotation</h2>
+        <svg id="rotation-svg" viewBox="0 0 220 220" width="220" height="220">
+          <circle cx="110" cy="110" r="100" fill="none" stroke="var(--line)" stroke-width="1.5" />
+          <line x1="110" y1="110" x2="210" y2="110" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4" />
+          <text x="150" y="128" class="axis-label">other answers</text>
+          <text x="98" y="20" class="axis-label">|w⟩ (hidden answer)</text>
+          <line id="state-vector" x1="110" y1="110" x2="210" y2="110" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" />
+          <circle cx="110" cy="110" r="3" fill="var(--accent)" />
+        </svg>
+        <p class="rotation-caption" id="rotation-caption">
+          Each Grover iteration rotates the state by a fixed angle, inside a
+          2D plane spanned by the hidden answer and everything else — however
+          many qubits are involved.
+        </p>
+      </div>
+    </section>
+
+    <section id="reveal" class="reveal" hidden>
+      <p class="revealed-text" id="revealed-text"></p>
+      <p class="hit-rate" id="hit-rate"></p>
+    </section>
+
+    <footer class="footnote">
+      Local Braket simulator, no AWS account needed — same circuits as the
+      <a href="https://github.com/jhamblin/quantum-eight-ball" target="_blank" rel="noopener">
+        quantum-eight-ball
+      </a> CLI. Your question's text is just flavor; it has no effect on the physics.
+    </footer>
+  </main>
+
+  <script src="/script.js"></script>
+</body>
+</html>
