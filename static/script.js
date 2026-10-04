@@ -14,7 +14,7 @@ const circuits = document.getElementById("circuits");
 const shakeDiagram = document.getElementById("shake-diagram");
 const groverDiagram = document.getElementById("grover-diagram");
 
-const STEP_PAUSE_MS = 1400;
+const STEP_PAUSE_MS = 3000;
 
 let selectedQubits = 3;
 
