@@ -194,7 +194,7 @@ h1 {
   min-height: 2px;
   background: var(--accent-soft);
   border-radius: 3px 3px 0 0;
-  transition: height 0.5s ease;
+  transition: height 0.8s ease;
 }
 
 .bar.is-hidden {
@@ -219,7 +219,7 @@ h1 {
 }
 
 #state-vector {
-  transition: transform 0.5s ease;
+  transition: transform 0.8s ease;
   transform-origin: 110px 110px;
 }
 
@@ -233,6 +233,40 @@ h1 {
   font-size: 0.85rem;
   line-height: 1.4;
   margin: 10px 0 0;
+}
+
+.circuits {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.circuit-details {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 18px;
+}
+
+.circuit-details summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.circuit-details[open] summary {
+  margin-bottom: 10px;
+}
+
+.circuit-diagram {
+  margin: 0;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--text);
+  white-space: pre;
 }
 
 .reveal {

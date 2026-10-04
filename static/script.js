@@ -10,6 +10,11 @@ const stateVector = document.getElementById("state-vector");
 const reveal = document.getElementById("reveal");
 const revealedText = document.getElementById("revealed-text");
 const hitRateEl = document.getElementById("hit-rate");
+const circuits = document.getElementById("circuits");
+const shakeDiagram = document.getElementById("shake-diagram");
+const groverDiagram = document.getElementById("grover-diagram");
+
+const STEP_PAUSE_MS = 1400;
 
 let selectedQubits = 3;
 
@@ -59,11 +64,15 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function animateSteps(steps, hiddenIndex) {
-  for (const probs of steps) {
-    setBarHeights(probs);
-    setRotationAngle(probs[hiddenIndex]);
-    await sleep(650);
+async function animateSteps(steps, hiddenIndex, iterations) {
+  for (let k = 0; k < steps.length; k++) {
+    status.textContent =
+      k === 0
+        ? "Starting from the uniform superposition (before any Grover iteration)..."
+        : `Iteration ${k} of ${iterations}: oracle flips the hidden answer's sign, diffuser inverts about the mean...`;
+    setBarHeights(steps[k]);
+    setRotationAngle(steps[k][hiddenIndex]);
+    await sleep(STEP_PAUSE_MS);
   }
 }
 
@@ -71,6 +80,7 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   shakeBtn.disabled = true;
   stage.hidden = true;
+  circuits.hidden = true;
   reveal.hidden = true;
   status.textContent = "Shaking the ball...";
   ball.classList.add("shaking");
@@ -94,10 +104,15 @@ form.addEventListener("submit", async (e) => {
     ball.classList.remove("shaking");
     status.textContent = `Hidden answer picked. Running Grover's algorithm (${data.iterations} iteration${data.iterations === 1 ? "" : "s"})...`;
 
+    shakeDiagram.textContent = data.shake_circuit;
+    groverDiagram.textContent = data.grover_circuit;
+    circuits.hidden = false;
+
     buildBars(data.n_answers, data.answers, data.hidden_index);
     stage.hidden = false;
 
-    await animateSteps(data.steps, data.hidden_index);
+    await sleep(STEP_PAUSE_MS);
+    await animateSteps(data.steps, data.hidden_index, data.iterations);
 
     revealedText.textContent = `🎱 ${data.answers[data.revealed_index]}`;
     hitRateEl.textContent = `Hidden answer measured ${Math.round(data.hit_rate * 100)}% of ${data.shots} shots.`;

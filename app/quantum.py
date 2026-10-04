@@ -194,15 +194,10 @@ def simulate_amplitude_steps(
     return steps
 
 
-def run_final_measurement(
-    target_bits: str, n_qubits: int, ancillas: List[int], iterations: int, shots: int
-) -> Dict[str, int]:
-    """The real, shot-based measurement of the fully-amplified circuit,
-    matching what eight_ball.py's CLI reports -- for the histogram shown
-    alongside the amplitude animation."""
-    device = LocalSimulator()
+def build_full_grover_circuit(
+    target_bits: str, n_qubits: int, ancillas: List[int], iterations: int
+) -> Circuit:
     main_qubits = list(range(n_qubits))
-
     circuit = Circuit()
     _touch_all_qubits(circuit, main_qubits + ancillas)
     for q in main_qubits:
@@ -210,7 +205,30 @@ def run_final_measurement(
     for _ in range(iterations):
         circuit.add_circuit(oracle(target_bits, main_qubits, ancillas))
         circuit.add_circuit(diffuser(main_qubits, ancillas))
+    return circuit
 
+
+# Matches eight_ball.py's own cutoff for printing a circuit diagram --
+# beyond this many qubits the ASCII art is too wide to read anyway.
+MAX_DIAGRAM_QUBITS = 6
+
+
+def render_circuit(circuit: Circuit, total_qubits: int) -> str:
+    """The same ASCII circuit diagram eight_ball.py prints to the terminal
+    (str(circuit)), or a text summary once it's too wide to render legibly."""
+    if total_qubits <= MAX_DIAGRAM_QUBITS:
+        return str(circuit)
+    return (
+        f"(diagram omitted: {circuit.depth} layers deep across "
+        f"{total_qubits} qubits, too wide to render legibly)"
+    )
+
+
+def run_final_measurement(circuit: Circuit, n_qubits: int, shots: int) -> Dict[str, int]:
+    """The real, shot-based measurement of the fully-amplified circuit,
+    matching what eight_ball.py's CLI reports -- for the histogram shown
+    alongside the amplitude animation."""
+    device = LocalSimulator()
     result = device.run(circuit, shots=shots).result()
     counts: Dict[str, int] = {}
     for bitstring, count in result.measurement_counts.items():
@@ -235,7 +253,12 @@ def ask(question: str, n_qubits: int, shots: int = 1000) -> dict:
 
     iterations = optimal_iterations(2**n_qubits)
     steps = simulate_amplitude_steps(target_bits, n_qubits, ancillas, iterations)
-    counts = run_final_measurement(target_bits, n_qubits, ancillas, iterations, shots)
+
+    grover_circuit = build_full_grover_circuit(target_bits, n_qubits, ancillas, iterations)
+    counts = run_final_measurement(grover_circuit, n_qubits, shots)
+
+    shake_diagram = render_circuit(build_shake_circuit(main_qubits), n_qubits)
+    grover_diagram = render_circuit(grover_circuit, n_qubits + n_ancillas)
 
     answers = get_answers(n_qubits)
     revealed_bits = max(counts, key=counts.get)
@@ -250,6 +273,8 @@ def ask(question: str, n_qubits: int, shots: int = 1000) -> dict:
         "hidden_bits": target_bits,
         "iterations": iterations,
         "steps": steps,
+        "shake_circuit": shake_diagram,
+        "grover_circuit": grover_diagram,
         "shots": shots,
         "counts": counts,
         "revealed_index": revealed_index,

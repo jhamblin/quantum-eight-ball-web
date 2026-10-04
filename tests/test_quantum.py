@@ -56,11 +56,27 @@ def test_simulate_amplitude_steps_starts_uniform_and_amplifies(n_qubits):
 
 def test_run_final_measurement_counts_sum_to_shots():
     shots = 500
-    counts = quantum.run_final_measurement(
-        target_bits="101", n_qubits=3, ancillas=[], iterations=2, shots=shots
+    circuit = quantum.build_full_grover_circuit(
+        target_bits="101", n_qubits=3, ancillas=[], iterations=2
     )
+    counts = quantum.run_final_measurement(circuit, n_qubits=3, shots=shots)
     assert sum(counts.values()) == shots
     assert counts.get("101", 0) / shots > 0.8
+
+
+def test_render_circuit_omits_wide_diagrams():
+    circuit = quantum.build_full_grover_circuit(
+        target_bits="00000", n_qubits=5, ancillas=[5, 6], iterations=4
+    )
+    text = quantum.render_circuit(circuit, total_qubits=7)
+    assert "too wide to render legibly" in text
+
+    small_circuit = quantum.build_full_grover_circuit(
+        target_bits="101", n_qubits=3, ancillas=[], iterations=2
+    )
+    text = quantum.render_circuit(small_circuit, total_qubits=3)
+    assert "too wide" not in text
+    assert "q0" in text
 
 
 def test_ask_end_to_end_smoke():
@@ -72,6 +88,8 @@ def test_ask_end_to_end_smoke():
     assert len(result["steps"]) == result["iterations"] + 1
     assert sum(result["counts"].values()) == 200
     assert result["hit_rate"] > 0.5
+    assert "q0" in result["shake_circuit"]
+    assert "q0" in result["grover_circuit"]
 
 
 def test_ask_rejects_out_of_range_qubits():
