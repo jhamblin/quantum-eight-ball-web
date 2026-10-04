@@ -220,7 +220,7 @@ h1 {
   display: flex;
   gap: 4px;
   margin-top: 6px;
-  height: 100px;
+  height: 130px;
 }
 
 .label-col {
@@ -236,8 +236,8 @@ h1 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 100px;
-  font-size: 0.62rem;
+  max-height: 130px;
+  font-size: 0.8rem;
   color: var(--muted);
   cursor: default;
 }
