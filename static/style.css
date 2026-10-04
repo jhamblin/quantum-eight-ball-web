@@ -190,6 +190,7 @@ h1 {
 }
 
 .bar {
+  position: relative;
   width: 100%;
   min-height: 2px;
   background: var(--accent-soft);
@@ -199,6 +200,22 @@ h1 {
 
 .bar.is-hidden {
   background: var(--accent);
+}
+
+.bar-value {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 3px;
+  font-size: 0.6rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.bar.is-hidden .bar-value {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .bars-labels {

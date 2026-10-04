@@ -40,7 +40,13 @@ function buildBars(n, answers, hiddenIndex) {
     const bar = document.createElement("div");
     bar.className = "bar" + (i === hiddenIndex ? " is-hidden" : "");
     bar.style.height = "2px";
-    bar.title = answers[i];
+    bar.dataset.answer = answers[i];
+
+    const value = document.createElement("div");
+    value.className = "bar-value";
+    value.textContent = "0%";
+    bar.appendChild(value);
+
     col.appendChild(bar);
     track.appendChild(col);
 
@@ -60,9 +66,21 @@ function buildBars(n, answers, hiddenIndex) {
 
 function setBarHeights(probs) {
   const bars = barsEl.querySelectorAll(".bar");
+  // Past 8 columns, a percentage on every bar overlaps its neighbors and
+  // becomes unreadable -- so only the current frontrunner gets one inline;
+  // every bar's exact value is still available via its tooltip.
+  const showAllValues = probs.length <= 8;
+  const maxIndex = probs.indexOf(Math.max(...probs));
+
   bars.forEach((bar, i) => {
-    const pct = Math.max(2, probs[i] * 100);
-    bar.style.height = `${(pct / 100) * 220}px`;
+    const actualPct = probs[i] * 100;
+    const heightPct = Math.max(2, actualPct);
+    bar.style.height = `${(heightPct / 100) * 220}px`;
+
+    const pctText = `${actualPct.toFixed(1)}%`;
+    bar.title = `${bar.dataset.answer} — ${pctText}`;
+    bar.querySelector(".bar-value").textContent =
+      showAllValues || i === maxIndex ? pctText : "";
   });
 }
 
