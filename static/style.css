@@ -251,6 +251,17 @@ h1 {
   text-align: center;
 }
 
+.rotation-panel summary {
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.rotation-panel[open] summary {
+  margin-bottom: 12px;
+}
+
 #rotation-svg {
   max-width: 100%;
 }
