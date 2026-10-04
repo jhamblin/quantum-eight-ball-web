@@ -150,9 +150,8 @@ h1 {
 
 .stage {
   display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .panel {
@@ -160,7 +159,6 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 18px;
-  flex: 1 1 320px;
 }
 
 .panel h2 {
