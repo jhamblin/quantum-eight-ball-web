@@ -168,10 +168,6 @@ h1 {
   font-weight: 600;
 }
 
-.speedup-panel {
-  margin-bottom: 16px;
-}
-
 .speedup-bars {
   display: flex;
   flex-direction: column;

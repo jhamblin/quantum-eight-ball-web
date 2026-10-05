@@ -40,50 +40,50 @@
       <p class="hit-rate" id="hit-rate"></p>
     </section>
 
-    <section id="speedup" class="panel speedup-panel" hidden>
-      <h2>Why this feels like magic</h2>
-
-      <div class="speedup-bars">
-        <div class="speedup-row">
-          <span class="speedup-label">🐌 Classical brute force</span>
-          <div class="speedup-bar-track">
-            <div class="speedup-bar classical" id="classical-bar"></div>
-          </div>
-          <span class="speedup-value" id="classical-value"></span>
-        </div>
-        <div class="speedup-row">
-          <span class="speedup-label">⚡ Grover's algorithm</span>
-          <div class="speedup-bar-track">
-            <div class="speedup-bar quantum" id="quantum-bar"></div>
-          </div>
-          <span class="speedup-value" id="quantum-value"></span>
-        </div>
-      </div>
-      <p class="speedup-caption" id="speedup-caption"></p>
-
-      <svg id="speedup-chart" viewBox="0 0 600 240" width="600" height="240">
-        <line x1="60" y1="20" x2="60" y2="200" stroke="var(--line)" stroke-width="1.5" />
-        <line x1="60" y1="200" x2="580" y2="200" stroke="var(--line)" stroke-width="1.5" />
-        <text x="12" y="24" class="axis-label">steps needed</text>
-        <text x="60" y="222" class="axis-label">possible answers (N) — log scale →</text>
-        <polyline id="classical-curve" fill="none" stroke="var(--muted)" stroke-width="2" />
-        <polyline id="quantum-curve" fill="none" stroke="var(--accent)" stroke-width="2.5" />
-        <circle id="classical-marker" r="5" fill="var(--muted)" />
-        <circle id="quantum-marker" r="5" fill="var(--accent)" />
-      </svg>
-      <p class="speedup-chart-caption">
-        Extrapolated past this demo's 8–32 answers using the same
-        optimal-iteration formula (<code>round(π/4·√N − 1/2)</code>) — the
-        gap between "check everything" and "just ask the quantum computer"
-        only gets more absurd as N grows.
-      </p>
-    </section>
-
     <section id="stage" class="stage" hidden>
       <div class="panel bars-panel">
         <h2>Amplitude of each possible answer</h2>
         <div id="bars" class="bars"></div>
       </div>
+
+      <section id="speedup" class="panel speedup-panel" hidden>
+        <h2>Why this feels like magic</h2>
+
+        <div class="speedup-bars">
+          <div class="speedup-row">
+            <span class="speedup-label">🐌 Classical brute force</span>
+            <div class="speedup-bar-track">
+              <div class="speedup-bar classical" id="classical-bar"></div>
+            </div>
+            <span class="speedup-value" id="classical-value"></span>
+          </div>
+          <div class="speedup-row">
+            <span class="speedup-label">⚡ Grover's algorithm</span>
+            <div class="speedup-bar-track">
+              <div class="speedup-bar quantum" id="quantum-bar"></div>
+            </div>
+            <span class="speedup-value" id="quantum-value"></span>
+          </div>
+        </div>
+        <p class="speedup-caption" id="speedup-caption"></p>
+
+        <svg id="speedup-chart" viewBox="0 0 600 240" width="600" height="240">
+          <line x1="60" y1="20" x2="60" y2="200" stroke="var(--line)" stroke-width="1.5" />
+          <line x1="60" y1="200" x2="580" y2="200" stroke="var(--line)" stroke-width="1.5" />
+          <text x="12" y="24" class="axis-label">steps needed</text>
+          <text x="60" y="222" class="axis-label">possible answers (N) — log scale →</text>
+          <polyline id="classical-curve" fill="none" stroke="var(--muted)" stroke-width="2" />
+          <polyline id="quantum-curve" fill="none" stroke="var(--accent)" stroke-width="2.5" />
+          <circle id="classical-marker" r="5" fill="var(--muted)" />
+          <circle id="quantum-marker" r="5" fill="var(--accent)" />
+        </svg>
+        <p class="speedup-chart-caption">
+          Extrapolated past this demo's 8–32 answers using the same
+          optimal-iteration formula (<code>round(π/4·√N − 1/2)</code>) — the
+          gap between "check everything" and "just ask the quantum computer"
+          only gets more absurd as N grows.
+        </p>
+      </section>
 
       <details class="panel rotation-panel">
         <summary>The same evolution, as a rotation</summary>
