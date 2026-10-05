@@ -168,6 +168,89 @@ h1 {
   font-weight: 600;
 }
 
+.speedup-panel {
+  margin-bottom: 16px;
+}
+
+.speedup-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.speedup-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 70px;
+  align-items: center;
+  gap: 10px;
+}
+
+.speedup-label {
+  font-size: 0.85rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.speedup-bar-track {
+  background: var(--accent-soft);
+  border-radius: 6px;
+  height: 20px;
+  overflow: hidden;
+}
+
+.speedup-bar {
+  height: 100%;
+  border-radius: 6px;
+  min-width: 3px;
+  transition: width 0.6s ease;
+}
+
+.speedup-bar.classical {
+  background: var(--muted);
+}
+
+.speedup-bar.quantum {
+  background: var(--accent);
+}
+
+.speedup-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.speedup-caption {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 12px 0 0;
+}
+
+#speedup-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 16px;
+}
+
+#speedup-chart .axis-label {
+  font-size: 11px;
+}
+
+.speedup-chart-caption {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+
+.speedup-chart-caption code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--text);
+}
+
 .bars {
   overflow-x: auto;
 }
@@ -348,5 +431,12 @@ h1 {
   }
   #question {
     flex: 1 1 auto;
+  }
+  .speedup-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .speedup-value {
+    text-align: left;
   }
 }

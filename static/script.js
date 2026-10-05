@@ -13,8 +13,29 @@ const hitRateEl = document.getElementById("hit-rate");
 const circuits = document.getElementById("circuits");
 const shakeDiagram = document.getElementById("shake-diagram");
 const groverDiagram = document.getElementById("grover-diagram");
+const speedup = document.getElementById("speedup");
+const classicalBar = document.getElementById("classical-bar");
+const quantumBar = document.getElementById("quantum-bar");
+const classicalValue = document.getElementById("classical-value");
+const quantumValue = document.getElementById("quantum-value");
+const speedupCaption = document.getElementById("speedup-caption");
+const classicalCurve = document.getElementById("classical-curve");
+const quantumCurve = document.getElementById("quantum-curve");
+const classicalMarker = document.getElementById("classical-marker");
+const quantumMarker = document.getElementById("quantum-marker");
 
 const STEP_PAUSE_MS = 3000;
+
+// Extrapolated well past the 8/16/32 answers this demo actually runs, so
+// the sqrt-vs-linear gap is obvious even for the smallest qubit count.
+const SPEEDUP_CHART_N_VALUES = [8, 16, 32, 64, 128, 256, 512, 1024, 2048];
+const CHART = { left: 60, right: 580, top: 20, bottom: 200 };
+
+// Mirrors optimal_iterations() in app/quantum.py.
+function optimalIterations(n) {
+  const theta = Math.asin(Math.sqrt(1 / n));
+  return Math.round(Math.PI / (4 * theta) - 0.5);
+}
 
 let selectedQubits = 3;
 
@@ -93,6 +114,47 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function xForN(n) {
+  const minLog = Math.log2(SPEEDUP_CHART_N_VALUES[0]);
+  const maxLog = Math.log2(SPEEDUP_CHART_N_VALUES[SPEEDUP_CHART_N_VALUES.length - 1]);
+  const t = (Math.log2(n) - minLog) / (maxLog - minLog);
+  return CHART.left + t * (CHART.right - CHART.left);
+}
+
+function yForValue(value, maxValue) {
+  const t = value / maxValue;
+  return CHART.bottom - t * (CHART.bottom - CHART.top);
+}
+
+function updateSpeedupPanel(nAnswers, iterations) {
+  const classicalPct = 100;
+  const quantumPct = Math.max(2, (iterations / nAnswers) * 100);
+  classicalBar.style.width = `${classicalPct}%`;
+  quantumBar.style.width = `${quantumPct}%`;
+  classicalValue.textContent = `up to ${nAnswers}`;
+  quantumValue.textContent = `${iterations}`;
+  speedupCaption.textContent =
+    `With ${nAnswers} possible answers, a classical brute-force search could need up to ` +
+    `${nAnswers} guesses (checking one at a time) — Grover's algorithm found it in just ` +
+    `${iterations} iteration${iterations === 1 ? "" : "s"}.`;
+
+  const maxN = SPEEDUP_CHART_N_VALUES[SPEEDUP_CHART_N_VALUES.length - 1];
+  const classicalPoints = SPEEDUP_CHART_N_VALUES.map(
+    (n) => `${xForN(n)},${yForValue(n, maxN)}`
+  ).join(" ");
+  const quantumPoints = SPEEDUP_CHART_N_VALUES.map(
+    (n) => `${xForN(n)},${yForValue(optimalIterations(n), maxN)}`
+  ).join(" ");
+  classicalCurve.setAttribute("points", classicalPoints);
+  quantumCurve.setAttribute("points", quantumPoints);
+
+  classicalMarker.setAttribute("cx", xForN(nAnswers));
+  classicalMarker.setAttribute("cy", yForValue(nAnswers, maxN));
+
+  quantumMarker.setAttribute("cx", xForN(nAnswers));
+  quantumMarker.setAttribute("cy", yForValue(iterations, maxN));
+}
+
 async function animateSteps(steps, hiddenIndex, iterations) {
   for (let k = 0; k < steps.length; k++) {
     status.textContent =
@@ -110,6 +172,7 @@ form.addEventListener("submit", async (e) => {
   shakeBtn.disabled = true;
   stage.hidden = true;
   circuits.hidden = true;
+  speedup.hidden = true;
   reveal.hidden = true;
   status.textContent = "Shaking the ball...";
   ball.classList.add("shaking");
@@ -136,6 +199,9 @@ form.addEventListener("submit", async (e) => {
     shakeDiagram.textContent = data.shake_circuit;
     groverDiagram.textContent = data.grover_circuit;
     circuits.hidden = false;
+
+    updateSpeedupPanel(data.n_answers, data.iterations);
+    speedup.hidden = false;
 
     buildBars(data.n_answers, data.answers, data.hidden_index);
     stage.hidden = false;
