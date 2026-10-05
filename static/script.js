@@ -155,6 +155,18 @@ function updateSpeedupPanel(nAnswers, iterations) {
   quantumMarker.setAttribute("cy", yForValue(iterations, maxN));
 }
 
+async function revealHiddenPick(steps, hiddenIndex) {
+  status.textContent =
+    "Quantum coin-flip: a hidden answer has been picked, kept secret until Grover reveals it...";
+  setBarHeights(steps[0]);
+  setRotationAngle(steps[0][hiddenIndex]);
+
+  const hiddenBar = barsEl.querySelector(".bar.is-hidden");
+  if (hiddenBar) hiddenBar.classList.add("shake-pulse");
+  await sleep(STEP_PAUSE_MS);
+  if (hiddenBar) hiddenBar.classList.remove("shake-pulse");
+}
+
 async function animateSteps(steps, hiddenIndex, iterations) {
   for (let k = 0; k < steps.length; k++) {
     status.textContent =
@@ -194,7 +206,6 @@ form.addEventListener("submit", async (e) => {
     const data = await res.json();
 
     ball.classList.remove("shaking");
-    status.textContent = `Hidden answer picked. Running Grover's algorithm (${data.iterations} iteration${data.iterations === 1 ? "" : "s"})...`;
 
     shakeDiagram.textContent = data.shake_circuit;
     groverDiagram.textContent = data.grover_circuit;
@@ -206,7 +217,9 @@ form.addEventListener("submit", async (e) => {
     buildBars(data.n_answers, data.answers, data.hidden_index);
     stage.hidden = false;
 
-    await sleep(STEP_PAUSE_MS);
+    await revealHiddenPick(data.steps, data.hidden_index);
+
+    status.textContent = `Running Grover's algorithm (${data.iterations} iteration${data.iterations === 1 ? "" : "s"})...`;
     await animateSteps(data.steps, data.hidden_index, data.iterations);
 
     revealedText.textContent = `🎱 ${data.answers[data.revealed_index]}`;
